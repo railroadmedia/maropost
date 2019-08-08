@@ -1,0 +1,41 @@
+{
+  "name": "railroad/maropost",
+  "type": "library",
+  "description": "Maropost API For Laravel",
+  "keywords": [
+    "maropost",
+    "api",
+    "laravel",
+    "wrapper"
+  ],
+  "homepage": "https://github.com/railroad/maropost",
+  "license": "GPL-3.0-or-later",
+  "prefer-stable": true,
+  "require": {
+    "php": "~7",
+    "laravel/framework": "5.6.*",
+    "guzzlehttp/guzzle": "~6.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~7.0",
+    "phpunit/php-code-coverage": "~6.0",
+    "orchestra/testbench": "~3.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Railroad\\Maropost\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Railroad\\Maropost\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Railroad\\Maropost\\Providers\\MaropostServiceProvider"
+      ]
+    }
+  }
+}
