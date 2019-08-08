@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Railroad\Maropost\Tests;
 
 use Carbon\Carbon;
 use Exception;
@@ -20,9 +20,6 @@ class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        $this->artisan('migrate', []);
-        $this->artisan('cache:clear', []);
-
         $this->faker = $this->app->make(Generator::class);
 
         Carbon::setTestNow(Carbon::now());
@@ -37,6 +34,8 @@ class TestCase extends BaseTestCase
      */
     protected function getEnvironmentSetUp($app)
     {
+
+
         $app->register(MaropostServiceProvider::class);
     }
 
