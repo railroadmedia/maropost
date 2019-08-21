@@ -4,7 +4,9 @@ namespace Railroad\Maropost\Services;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use Railroad\Maropost\Gateways\MaropostGateway;
 use Railroad\Maropost\ValueObjects\ContactVO;
+use Railroad\Maropost\ValueObjects\ListVO;
 
 class ListService
 {
@@ -18,10 +20,12 @@ class ListService
      */
     private $authToken;
 
+    private $maropostGateway;
+
     /**
      * ContactService constructor.
      */
-    public function __construct()
+    public function __construct(MaropostGateway $maropostGateway)
     {
         $this->authToken = config('maropost.auth_token');
         $this->guzzleClient = new Client(
@@ -29,32 +33,18 @@ class ListService
                 'base_uri' => config('maropost.base_api_url').config('maropost.account_id').'/',
             ]
         );
+
+        $this->maropostGateway = $maropostGateway;
     }
 
     /**
-     * @param  ContactVO  $contact
-     *
+     * @param ListVO $list
+     * @return array|mixed|object
      * @throws GuzzleException
-     * @return mixed
      */
-    public function create(ContactVO $contact)
+    public function create(ListVO $list)
     {
-        return json_decode(
-            $this->guzzleClient->request(
-                'POST',
-                'contacts',
-                [
-                    'json' => ['contact' => $contact->toArray()],
-                    'query' => [
-                        'auth_token' => config('maropost.auth_token'),
-                    ],
-                    'headers' => [
-                        'Content-Type' => 'application/json',
-                        'Accept' => 'application/json',
-                    ],
-                ]
-            )->getBody()
-        );
+         return $this->maropostGateway->post('lists',['list' => $list->toArray()]);
     }
 
     /**
