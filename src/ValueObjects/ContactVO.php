@@ -17,13 +17,13 @@ class ContactVO
      * Contact constructor.
      *
      * @param $email
-     * @param  string  $firstName
-     * @param  string  $lastName
-     * @param  array  $customFields
-     * @param  array  $tagsToAdd
-     * @param  array  $tagsToRemove
-     * @param  array  $subscribeListIds
-     * @param  array  $unsubscribeListIds
+     * @param string $firstName
+     * @param string $lastName
+     * @param array $customFields
+     * @param array $tagsToAdd
+     * @param array $tagsToRemove
+     * @param array $subscribeListIds
+     * @param array $unsubscribeListIds
      */
     public function __construct(
         $email,
@@ -57,6 +57,10 @@ class ContactVO
             'custom_field' => $this->customFields,
             'add_tags' => $this->tagsToAdd,
             'remove_tags' => $this->tagsToRemove,
+            'options' => [
+                'subscribe_list_ids' => implode(',', $this->subscribeListIds),
+                'unsubscribe_list_ids' => implode(',', $this->unsubscribeListIds),
+            ],
         ];
     }
 }

@@ -101,4 +101,33 @@ class ContactServiceTest extends TestCase
         $this->assertEmpty($response->tags);
     }
 
+    public function test_add_contact_to_lists()
+    {
+        $response = $this->contactService->addContactToLists([1],
+            new ContactVO($this->testEmailAddress)
+        );
+
+        $this->assertNotEmpty($response->list_subscriptions);
+    }
+
+    public function test_pull_list_contacts()
+    {
+        $response = $this->contactService->getListContacts(1);
+
+        $this->assertNotEmpty($response);
+    }
+
+    public function test_remove_contact_from_list()
+    {
+        $this->contactService->addContactToLists([1],
+            new ContactVO($this->testEmailAddress)
+        );
+
+        $response = $this->contactService->removeContactFromLists([1],
+            new ContactVO($this->testEmailAddress)
+        );
+
+        $this->assertNull($response);
+    }
+
 }
