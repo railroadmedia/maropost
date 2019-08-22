@@ -13,11 +13,18 @@ class ContactServiceTest extends TestCase
      */
     public $contactService;
 
+    /**
+     * @var test email address
+     */
+    public $testEmailAddress;
+
     protected function setUp()
     {
         parent::setUp();
 
         $this->contactService = app()->make(ContactService::class);
+
+        $this->testEmailAddress = 'roxana@drumeo.com';
     }
 
     public function test_create()
@@ -42,10 +49,10 @@ class ContactServiceTest extends TestCase
 
     public function test_find_one_by_email()
     {
-        $response = $this->contactService->findOneByEmail('roxana@drumeo.com');
+        $response = $this->contactService->findOneByEmail($this->testEmailAddress);
 
         $this->assertNotNull($response);
-        $this->assertEquals('roxana@drumeo.com', $response->email);
+        $this->assertEquals($this->testEmailAddress, $response->email);
     }
 
     public function _test_find_one_by_id()
@@ -53,12 +60,12 @@ class ContactServiceTest extends TestCase
         $response = $this->contactService->findOneById(430);
 
         $this->assertNotNull($response);
-        $this->assertEquals('roxana@drumeo.com', $response->email);
+        $this->assertEquals($this->testEmailAddress, $response->email);
     }
 
     public function test_delete_contact_by_email()
     {
-        $response = $this->contactService->deleteContactByEmail('roxana@drumeo.com');
+        $response = $this->contactService->deleteContactByEmail($this->testEmailAddress);
 
         $this->assertNull($response);
     }
@@ -66,10 +73,9 @@ class ContactServiceTest extends TestCase
     public function test_add_tags_to_contact()
     {
         $response = $this->contactService->addTagsToContact(
-            new ContactVO('roxana@drumeo.com'),
+            new ContactVO($this->testEmailAddress),
             ['test_tag','test_tag13']
         );
-        $response = $this->contactService->findOneByEmail('roxana@drumeo.com');
 
         $this->assertNotEmpty($response->tags);
         $this->assertEquals(2, count($response->tags));
@@ -78,10 +84,19 @@ class ContactServiceTest extends TestCase
     public function test_remove_tags_from_contact()
     {
         $response = $this->contactService->removeTagsFromContact(
-            new ContactVO('roxana@drumeo.com'),
+            new ContactVO($this->testEmailAddress),
             ['test_tag','test_tag13']
         );
-        $response = $this->contactService->findOneByEmail('roxana@drumeo.com');
+
+        $this->assertEmpty($response->tags);
+    }
+
+    public function test_add_inexistent_tags_to_contact()
+    {
+        $response = $this->contactService->addTagsToContact(
+            new ContactVO($this->testEmailAddress),
+            [$this->faker->word,$this->faker->word]
+        );
 
         $this->assertEmpty($response->tags);
     }

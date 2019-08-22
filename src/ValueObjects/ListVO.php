@@ -43,15 +43,15 @@ class ListVO
      */
     public function __construct(
         $name,
-        $replyToEmail = '',
-        $address = '',
-        $fromEmail,
+        $address,
         $language,
-        $fromName,
-        $addToUnsubscribePage,
-        $postUrl,
-        $displayName,
-        $description
+        $fromEmail = '',
+        $replyToEmail = '',
+        $fromName = '',
+        $addToUnsubscribePage = false,
+        $postUrl = '',
+        $displayName = '',
+        $description = ''
     ) {
         $this->name = $name;
         $this->replyToEmail = $replyToEmail;

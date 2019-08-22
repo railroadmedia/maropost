@@ -2,39 +2,35 @@
 
 namespace Railroad\Maropost\Services;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Railroad\Maropost\Gateways\MaropostGateway;
-use Railroad\Maropost\ValueObjects\ContactVO;
 use Railroad\Maropost\ValueObjects\ListVO;
+use stdClass;
 
 class ListService
 {
     /**
-     * @var Client
+     * @var MaropostGateway
      */
-    private $guzzleClient;
-
-    /**
-     * @var string
-     */
-    private $authToken;
-
     private $maropostGateway;
 
     /**
-     * ContactService constructor.
+     * ListService constructor.
+     *
+     * @param MaropostGateway $maropostGateway
      */
     public function __construct(MaropostGateway $maropostGateway)
     {
-        $this->authToken = config('maropost.auth_token');
-        $this->guzzleClient = new Client(
-            [
-                'base_uri' => config('maropost.base_api_url').config('maropost.account_id').'/',
-            ]
-        );
-
         $this->maropostGateway = $maropostGateway;
+    }
+
+    /**
+     * @param bool $noCounts - set true to get description of lists other than counts, for faster results
+     * @return array
+     */
+    public function index($noCounts = false)
+    {
+        return $this->maropostGateway->get('lists', ['no_counts' => $noCounts]);
     }
 
     /**
@@ -44,32 +40,34 @@ class ListService
      */
     public function create(ListVO $list)
     {
-         return $this->maropostGateway->post('lists',['list' => $list->toArray()]);
+        return $this->maropostGateway->post('lists', ['list' => $list->toArray()]);
     }
 
     /**
-     * @param $email
-     *
-     * @throws GuzzleException
-     * @return mixed
+     * @param $id
+     * @param ListVO $list
+     * @return array
      */
-    public function findOneByEmail($email)
+    public function update($id, ListVO $list)
     {
-        return json_decode(
-            $this->guzzleClient->request(
-                'GET',
-                'contacts/email',
-                [
-                    'query' => [
-                        'auth_token' => config('maropost.auth_token'),
-                        'contact' => ['email' => $email],
-                    ],
-                    'headers' => [
-                        'Content-Type' => 'application/json',
-                        'Accept' => 'application/json',
-                    ],
-                ]
-            )->getBody()
-        );
+        return $this->maropostGateway->put('lists/' . $id, ['list' => $list->toArray()]);
+    }
+
+    /**
+     * @param $id
+     * @return array
+     */
+    public function delete($id)
+    {
+        return $this->maropostGateway->delete('lists/' . $id);
+    }
+
+    /**
+     * @param $id
+     * @return stdClass
+     */
+    public function show($id)
+    {
+        return $this->maropostGateway->get('lists/' . $id);
     }
 }

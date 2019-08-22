@@ -2,11 +2,8 @@
 
 namespace Railroad\Maropost\Tests\Integration;
 
-use Carbon\Carbon;
-use Railroad\Maropost\Services\ContactService;
 use Railroad\Maropost\Services\TagService;
 use Railroad\Maropost\Tests\TestCase;
-use Railroad\Maropost\ValueObjects\ContactVO;
 use Railroad\Maropost\ValueObjects\TagVO;
 
 class TagServiceTest extends TestCase
@@ -25,7 +22,7 @@ class TagServiceTest extends TestCase
 
     public function test_create()
     {
-        $tagName = 'test_tag'.rand();
+        $tagName = $this->faker->word;
         $response = $this->tagService->create(
             new TagVO($tagName)
         );
@@ -43,7 +40,7 @@ class TagServiceTest extends TestCase
     public function test_delete()
     {
         $tag = $this->tagService->create(
-            new TagVO('test_tag2')
+            new TagVO($this->faker->word)
         );
         $response = $this->tagService->delete($tag->id);
 

@@ -16,6 +16,8 @@ class ContactService
 
     /**
      * ContactService constructor.
+     *
+     * @param MaropostGateway $maropostGateway
      */
     public function __construct(MaropostGateway $maropostGateway)
     {
@@ -24,8 +26,7 @@ class ContactService
 
     /**
      * @param ContactVO $contact
-     *
-     * @return mixed
+     * @return array|mixed|object
      * @throws GuzzleException
      */
     public function createOrUpdate(ContactVO $contact)
@@ -35,21 +36,16 @@ class ContactService
 
     /**
      * @param $email
-     *
-     * @return mixed
-     * @throws GuzzleException
+     * @return \stdClass
      */
     public function findOneByEmail($email)
     {
         return $this->maropostGateway->get("contacts/email", ['contact' => ['email' => $email]]);
     }
 
-
     /**
-     * @param $email
-     *
-     * @return mixed
-     * @throws GuzzleException
+     * @param $id
+     * @return \stdClass
      */
     public function findOneById($id)
     {
@@ -67,28 +63,32 @@ class ContactService
 
     /**
      * @param ContactVO $contact
-     * @param TagVO $tag
-     * @return array|mixed|object
+     * @param array $tags
+     * @return \stdClass
      * @throws GuzzleException
      */
     public function addTagsToContact(ContactVO $contact, array $tags)
     {
         $contact->tagsToAdd = $tags;
 
-        return $this->maropostGateway->post("contacts", ['contact' => $contact->toArray()]);
+        $this->maropostGateway->post("contacts", ['contact' => $contact->toArray()]);
+
+        return $this->findOneByEmail($contact->email);
     }
 
     /**
      * @param ContactVO $contact
-     * @param TagVO $tag
-     * @return array|mixed|object
+     * @param array $tags
+     * @return \stdClass
      * @throws GuzzleException
      */
     public function removeTagsFromContact(ContactVO $contact, array $tags)
     {
         $contact->tagsToRemove = $tags;
 
-        return $this->maropostGateway->post("contacts", ['contact' => $contact->toArray()]);
+        $this->maropostGateway->post("contacts", ['contact' => $contact->toArray()]);
+
+        return $this->findOneByEmail($contact->email);
     }
 
 }

@@ -2,9 +2,11 @@
 
 namespace Railroad\Maropost\Gateways;
 
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
+use stdClass;
 
 class MaropostGateway
 {
@@ -13,20 +15,18 @@ class MaropostGateway
      */
     private $client;
 
-    public static $debug = false;
-
     /**
      * MaropostGateway constructor.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct()
     {
         if (!config('maropost.account_id')) {
-            throw new \Exception("Maropost account ID is required.");
+            throw new Exception("Maropost account ID is required.");
         }
         if (!config('maropost.auth_token')) {
-            throw new \Exception("Maropost auth token is required.");
+            throw new Exception("Maropost auth token is required.");
         }
 
         $args = [
@@ -47,7 +47,7 @@ class MaropostGateway
      *
      * @param string $target The URI target that will be added to the base url
      * @param array $params The query string and values structured as an array
-     * @return \stdClass          What Maropost returns as an object structure
+     * @return stdClass          What Maropost returns as an object structure
      */
     public function get($target, $params = [])
     {
@@ -81,8 +81,7 @@ class MaropostGateway
                     'headers' => [
                         'Content-Type' => 'application/json',
                         'Accept' => 'application/json',
-                    ],
-                    'debug' => self::$debug,
+                    ]
                 ]
             );
             return json_decode($response->getBody());
@@ -107,8 +106,7 @@ class MaropostGateway
                     'json' => $params,
                     'headers' => [
                         'Accept' => 'application/json',
-                    ],
-                    'debug' => self::$debug,
+                    ]
                 ]
             );
             return json_decode($response->getBody());
