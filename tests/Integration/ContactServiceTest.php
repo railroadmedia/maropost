@@ -55,7 +55,7 @@ class ContactServiceTest extends TestCase
         $this->assertEquals($this->testEmailAddress, $response->email);
     }
 
-    public function _test_find_one_by_id()
+    public function test_find_one_by_id()
     {
         $response = $this->contactService->findOneById(430);
 

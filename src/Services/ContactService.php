@@ -58,7 +58,18 @@ class ContactService
      */
     public function findOneById($id)
     {
-        return $this->maropostGateway->get("contacts/email", ['contact' => ['id' => $id]]);
+        $contact = null;
+
+        $lists = $this->maropostGateway->get("lists", ['no_counts' => true]);
+
+        foreach($lists as $list){
+            $contact = $this->maropostGateway->get("lists/".$list->id."/contacts/".$id);
+            if($contact instanceof stdClass){
+                return $contact;
+            }
+        }
+
+        return $contact;
     }
 
     /**
