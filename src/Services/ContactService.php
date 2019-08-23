@@ -67,7 +67,9 @@ class ContactService
      */
     public function deleteContactByEmail($email)
     {
-        return $this->maropostGateway->delete('contacts/delete_all', ['contact' => ['email' => $email]]);
+        $this->maropostGateway->delete('contacts/delete_all', ['contact' => ['email' => $email]]);
+
+        return $this->findOneByEmail($email);
     }
 
     /**
@@ -125,5 +127,7 @@ class ContactService
         $contact->unsubscribeListIds = $listIds;
 
         $this->maropostGateway->post("contacts", ['contact' => $contact->toArray()]);
+
+        return $this->findOneByEmail($contact->email);
     }
 }
