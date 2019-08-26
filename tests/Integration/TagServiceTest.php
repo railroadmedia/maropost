@@ -34,7 +34,14 @@ class TagServiceTest extends TestCase
     {
         $response = $this->tagService->findByName('test_tag');
 
-        $this->assertEquals('test_tag', $response[0]->name);
+        $this->assertEquals('test_tag', $response->name);
+    }
+
+    public function test_get_inexistent_tag_by_name()
+    {
+        $response = $this->tagService->findByName($this->faker->word.'$$$$'.$this->faker->word);
+
+        $this->assertNull($response);
     }
 
     public function test_delete()

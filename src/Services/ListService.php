@@ -2,6 +2,8 @@
 
 namespace Railroad\Maropost\Services;
 
+use Exception;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use Railroad\Maropost\Gateways\MaropostGateway;
 use Railroad\Maropost\ValueObjects\ListVO;
@@ -40,34 +42,70 @@ class ListService
      */
     public function create(ListVO $list)
     {
-        return $this->maropostGateway->post('lists', ['list' => $list->toArray()]);
+        try {
+            $list = $this->maropostGateway->post('lists', ['list' => $list->toArray()]);
+        } catch (ClientException $e) {
+            $responseBodyAsString =
+                $e->getResponse()
+                    ->getBody()
+                    ->getContents();
+            throw new Exception($responseBodyAsString);
+        }
+        return $list;
     }
 
     /**
      * @param $id
      * @param ListVO $list
      * @return array
+     * @throws Exception
      */
     public function update($id, ListVO $list)
     {
-        return $this->maropostGateway->put('lists/' . $id, ['list' => $list->toArray()]);
+        try {
+            return $this->maropostGateway->put('lists/' . $id, ['list' => $list->toArray()]);
+        } catch (ClientException $e) {
+            $responseBodyAsString =
+                $e->getResponse()
+                    ->getBody()
+                    ->getContents();
+            throw new Exception($responseBodyAsString);
+        }
     }
 
     /**
      * @param $id
      * @return array
+     * @throws Exception
      */
     public function delete($id)
     {
-        return $this->maropostGateway->delete('lists/' . $id);
+        try {
+            return $this->maropostGateway->delete('lists/' . $id);
+        } catch (ClientException $e) {
+            $responseBodyAsString =
+                $e->getResponse()
+                    ->getBody()
+                    ->getContents();
+            throw new Exception($responseBodyAsString);
+        }
     }
 
     /**
      * @param $id
-     * @return stdClass
+     * @return array|mixed|object|stdClass
+     * @throws Exception
      */
     public function show($id)
     {
-        return $this->maropostGateway->get('lists/' . $id);
+        try {
+            return $this->maropostGateway->get('lists/' . $id);
+        } catch (ClientException $e) {
+            $responseBodyAsString =
+                $e->getResponse()
+                    ->getBody()
+                    ->getContents();
+            throw new Exception($responseBodyAsString);
+        }
     }
 }

@@ -4,9 +4,7 @@ namespace Railroad\Maropost\Gateways;
 
 use Exception;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
-use stdClass;
 
 class MaropostGateway
 {
@@ -45,21 +43,15 @@ class MaropostGateway
     /**
      * Function to perform GET method on $target URI with $params as json parameters
      *
-     * @param string $target The URI target that will be added to the base url
+     * @param $target The URI target that will be added to the base url
      * @param array $params The query string and values structured as an array
-     * @return stdClass          What Maropost returns as an object structure
+     * @return array|mixed|object
      */
     public function get($target, $params = [])
     {
-        // Try to get a response from Maropost API using Guzzle Client
-        try {
-            $response = $this->client->get($target, ['json' => $params]);
+        $response = $this->client->get($target, ['json' => $params]);
 
-            // If successful, return an object that decodes the returned JSON
-            return json_decode($response->getBody());
-        } catch (ClientException $e) {
-            return $this->handleException($e);
-        }
+        return json_decode($response->getBody());
     }
 
     /**
@@ -67,27 +59,14 @@ class MaropostGateway
      *
      * @param string $target The URI target that will be added to the base url
      * @param array $params The query string and values structured as an array
-     * @return array|mixed|object   What Maropost returns as an object structure
+     * @return array|mixed|object   What Maropost returns
      * @throws GuzzleException
      */
     public function post($target, $params = [])
     {
-        try {
-            $response = $this->client->request(
-                'POST',
-                $target,
-                [
-                    'json' => $params,
-                    'headers' => [
-                        'Content-Type' => 'application/json',
-                        'Accept' => 'application/json',
-                    ]
-                ]
-            );
-            return json_decode($response->getBody());
-        } catch (ClientException $e) {
-            return $this->handleException($e);
-        }
+        $response = $this->client->post($target, ['json' => $params,]);
+
+        return json_decode($response->getBody());
     }
 
     /**
@@ -95,62 +74,26 @@ class MaropostGateway
      *
      * @param string $target The URI target that will be added to the base url
      * @param array $params The query string and values structured as an array
-     * @return array          What Maropost returns as an array structure
+     * @return array          What Maropost returns
      */
     public function put($target, $params = [])
     {
-        try {
-            $response = $this->client->put(
-                $target,
-                [
-                    'json' => $params,
-                    'headers' => [
-                        'Accept' => 'application/json',
-                    ]
-                ]
-            );
-            return json_decode($response->getBody());
-        } catch (ClientException $e) {
-            return $this->handleException($e);
-        }
+        $response = $this->client->put($target, ['json' => $params,]);
+
+        return json_decode($response->getBody());
     }
 
     /**
      * Function to perform DELETE method on $target URI with $params as query parameters
      *
-     * @param string $target The URI target that will be added to the base url
+     * @param $target The URI target that will be added to the base url
      * @param array $params The query string and values structured as an array
-     * @return array          What Maropost returns as an array structure
+     * @return array|mixed|object What Maropost returns
      */
     public function delete($target, $params = [])
     {
-        try {
-            $response = $this->client->delete($target, ['json' => $params]);
+        $response = $this->client->delete($target, ['json' => $params]);
 
-            return json_decode($response->getBody());
-        } catch (ClientException $e) {
-            return $this->handleException($e);
-        }
+        return json_decode($response->getBody());
     }
-
-    /**
-     * Function to handle exceptions caught in the request methods
-     *
-     * @param object $exception [description]
-     * @return array
-     */
-    private function handleException($exception)
-    {
-        // Check if the Exception has a response
-        if ($exception->hasResponse()) {
-            // Use the exception response to a build an array to return
-            // with the status code (so at least we have something)
-            $response = $exception->getResponse();
-            $status = $response->getStatusCode();
-            return ['status' => $status, 'message' => $exception->getMessage()];
-        } else {
-            return ['status' => 404];
-        }
-    }
-
 }

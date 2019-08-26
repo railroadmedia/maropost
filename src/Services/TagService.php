@@ -2,7 +2,8 @@
 
 namespace Railroad\Maropost\Services;
 
-
+use Exception;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use Railroad\Maropost\Gateways\MaropostGateway;
 use Railroad\Maropost\ValueObjects\TagVO;
@@ -31,18 +32,33 @@ class TagService
      */
     public function create(TagVO $tag)
     {
-        return $this->maropostGateway->post("tags", ['tag' => $tag->toArray()]);
+        try {
+            $task = $this->maropostGateway->post("tags", ['tag' => $tag->toArray()]);
+        } catch (ClientException $e) {
+            $responseBodyAsString =
+                $e->getResponse()
+                    ->getBody()
+                    ->getContents();
+            throw new Exception($responseBodyAsString);
+        }
+        return $task;
     }
 
     /**
      * @param $name
      *
-     * @throws GuzzleException
      * @return mixed
+     * @throws GuzzleException
      */
     public function findByName($name)
     {
-        return $this->maropostGateway->get("tags", ['tags' => ['name' => $name]]);
+        try {
+            $task = $this->maropostGateway->get("tags", ['name' => $name]);
+        } catch (ClientException $e) {
+            $task = null;
+        }
+
+        return $task;
     }
 
     /**
@@ -52,17 +68,31 @@ class TagService
      */
     public function findById($id)
     {
-        return $this->maropostGateway->get("tag/".$id);
+        try {
+            $task = $this->maropostGateway->get("tag/" . $id);
+        } catch (ClientException $e) {
+            $task = null;
+        }
+
+        return $task;
     }
 
     /**
      * @param $id
-     * @return array|mixed|object
-     * @throws GuzzleException
+     * @return array
+     * @throws Exception
      */
     public function delete($id)
     {
-        return $this->maropostGateway->delete('tags/'.$id);
+        try {
+            return $this->maropostGateway->delete('tags/' . $id);
+        } catch (ClientException $e) {
+            $responseBodyAsString =
+                $e->getResponse()
+                    ->getBody()
+                    ->getContents();
+            throw new Exception($responseBodyAsString);
+        }
     }
 
 }

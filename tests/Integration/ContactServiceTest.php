@@ -63,18 +63,25 @@ class ContactServiceTest extends TestCase
         $this->assertEquals($this->testEmailAddress, $response->email);
     }
 
+    public function test_find_one_by_id_not_existing()
+    {
+        $response = $this->contactService->findOneById(rand(9999,999999));
+
+        $this->assertNull($response);
+    }
+
     public function test_delete_contact_by_email()
     {
         $response = $this->contactService->deleteContactByEmail($this->testEmailAddress);
 
-        $this->assertNull($response);
+        $this->assertEmpty($response->list_subscriptions);
     }
 
     public function test_add_tags_to_contact()
     {
         $response = $this->contactService->addTagsToContact(
             new ContactVO($this->testEmailAddress),
-            ['test_tag','test_tag13']
+            ['test_tag','Drumeo - Customers - Members']
         );
 
         $this->assertNotEmpty($response->tags);
@@ -85,7 +92,7 @@ class ContactServiceTest extends TestCase
     {
         $response = $this->contactService->removeTagsFromContact(
             new ContactVO($this->testEmailAddress),
-            ['test_tag','test_tag13']
+            ['test_tag','Drumeo - Customers - Members']
         );
 
         $this->assertEmpty($response->tags);
@@ -127,7 +134,7 @@ class ContactServiceTest extends TestCase
             new ContactVO($this->testEmailAddress)
         );
 
-        $this->assertNull($response);
+        $this->assertEquals('Unsubscribed', $response->list_subscriptions[0]->status);
     }
 
 }
