@@ -73,6 +73,28 @@ $content = $this->contactService->findOneByEmail($email);
 | failed | null | null |  |
 | succeded | stdClass | {#281 <br/>   +"id": 430 <br/>   +"account_id": 2124<br/>   +"email": "roxana@drumeo.com"<br/>   +"first_name": ""<br/>   +"last_name": ""<br/>   +"created_at": "2019-08-20T09:30:17.000-04:00"<br/>   +"updated_at": "2019-08-21T04:18:53.000-04:00"<br/>   +"uid": null<br/>   +"orders": []<br/>   +"list_subscriptions": []<br/>   +"workflows": []<br/>   +"tags": []<br/> } |  |
 
+
+### findOneById
+
+Gets the contact assigned to any lists according to id
+
+#### Usage Example
+```php
+$content = $this->contactService->findOneById($id);
+```
+#### Parameters
+| #  |  name             |  required |  type    |  description                        | 
+|----|-------------------|-----------|----------|-------------------------------------| 
+| 1  |  id |  yes      |  integer  |  Contact id | 
+ 
+
+#### Responses
+| outcome | return data type | return data value | notes |
+|----------|------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------|
+| failed | null | null |  |
+| succeded | stdClass | {#281 <br/>   +"id": 430 <br/>   +"account_id": 2124<br/>   +"email": "roxana@drumeo.com"<br/>   +"first_name": ""<br/>   +"last_name": ""<br/>   +"created_at": "2019-08-20T09:30:17.000-04:00"<br/>   +"updated_at": "2019-08-21T04:18:53.000-04:00"<br/>   +"uid": null<br/>   +"orders": []<br/>   +"list_subscriptions": []<br/>   +"workflows": []<br/>   +"tags": []<br/> } |  |
+
+
 ### addContactToLists
 
 Add contact to specified lists.
