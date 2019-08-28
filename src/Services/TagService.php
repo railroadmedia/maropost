@@ -46,9 +46,7 @@ class TagService
 
     /**
      * @param $name
-     *
-     * @return mixed
-     * @throws GuzzleException
+     * @return array|mixed|object|\stdClass|null
      */
     public function findByName($name)
     {
@@ -63,8 +61,7 @@ class TagService
 
     /**
      * @param $id
-     * @return array|mixed|object
-     * @throws GuzzleException
+     * @return array|mixed|object|\stdClass|null
      */
     public function findById($id)
     {
@@ -79,7 +76,7 @@ class TagService
 
     /**
      * @param $id
-     * @return array
+     * @return array|mixed|object
      * @throws Exception
      */
     public function delete($id)

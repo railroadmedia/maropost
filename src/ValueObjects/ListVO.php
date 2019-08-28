@@ -71,7 +71,6 @@ class ListVO
     public function toArray()
     {
         return [
-
             'name' => $this->name,
             'reply_to_email' => $this->replyToEmail,
             'address' => $this->address,

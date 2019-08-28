@@ -14,7 +14,7 @@ class ContactVO
     public $unsubscribeListIds = [];
 
     /**
-     * Contact constructor.
+     * ContactVO constructor.
      *
      * @param $email
      * @param string $firstName
@@ -57,10 +57,6 @@ class ContactVO
             'custom_field' => $this->customFields,
             'add_tags' => $this->tagsToAdd,
             'remove_tags' => $this->tagsToRemove,
-            'options' => [
-                'subscribe_list_ids' => implode(',', $this->subscribeListIds),
-                'unsubscribe_list_ids' => implode(',', $this->unsubscribeListIds),
-            ],
         ];
     }
 }

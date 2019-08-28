@@ -52,6 +52,30 @@ $content = $this->contactService->createOrUpdate(ContactVO $contact);
 | failed | null | null |  |
 | succeded | stdClass | {#281 <br/>   +"id": 430 <br/>   +"account_id": 2124<br/>   +"email": "roxana@drumeo.com"<br/>   +"first_name": ""<br/>   +"last_name": ""<br/>   +"created_at": "2019-08-20T09:30:17.000-04:00"<br/>   +"updated_at": "2019-08-21T04:18:53.000-04:00"<br/>   +"uid": null<br/>   +"orders": []<br/>   +"list_subscriptions": []<br/>   +"workflows": []<br/>   +"tags": []<br/> } |  |
 
+### update
+
+Update a contact without a list, based on id. This method should be used when update the email address.
+
+#### Usage Example
+```php
+$content = $this->contactService->update($contactId, ContactVO $contact);
+```
+#### Parameters
+| # | name | required | type | description |
+|:---:|:---------:|:--------:|------------------|-------------------------------------------|
+| 1 | contactId | yes | integer | Contact id |
+| 2 | contact | yes | ContactVO object | The contact object that should be update. |
+<!--
+#, name, required, type, description
+1 , id, yes, integer , id of content you want to pull  
+-->
+#### Responses
+
+| outcome | return data type | return data value | notes |
+|----------|------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------|
+| failed | null | null |  |
+| succeded | stdClass | {#281 <br/>   +"id": 430 <br/>   +"account_id": 2124<br/>   +"email": "roxana@drumeo.com"<br/>   +"first_name": ""<br/>   +"last_name": ""<br/>   +"created_at": "2019-08-20T09:30:17.000-04:00"<br/>   +"updated_at": "2019-08-21T04:18:53.000-04:00"<br/>   +"uid": null<br/>   +"orders": []<br/>   +"list_subscriptions": []<br/>   +"workflows": []<br/>   +"tags": []<br/> } |  |
+
 
 ### findOneByEmail
 
@@ -76,7 +100,7 @@ $content = $this->contactService->findOneByEmail($email);
 
 ### findOneById
 
-Gets the contact assigned to any lists according to id
+Gets the contact based on id
 
 #### Usage Example
 ```php
@@ -101,13 +125,13 @@ Add contact to specified lists.
 
 #### Usage Example
 ```php
-$content = $this->contactService->addContactToLists($listIds, $contact);
+$content = $this->contactService->addContactToLists($listIds, $contactId);
 ```
 #### Parameters
 | # | name | required | type | description |
 |---|---------|----------|------------------|--------------------------------------------------|
 | 1 | listIds | yes | array | The lists ids where the contact will be assigned |
-| 2 | contact | yes | ContactVO object | The contact |
+| 2 | contactId | yes | integer | The contact id|
  
 #### Responses
 
@@ -124,13 +148,13 @@ Remove contact from specified lists.
 
 #### Usage Example
 ```php
-$content = $this->contactService->removeContactFromLists($listIds, $contact);
+$content = $this->contactService->removeContactFromLists($listIds, $contactId);
 ```
 #### Parameters
 | # | name | required | type | description |
 |---|---------|----------|------------------|--------------------------------------------------|
 | 1 | listIds | yes | array | The lists ids |
-| 2 | contact | yes | ContactVO object | The contact |
+| 2 | contactId | yes | integer | The contact id. |
  
 #### Responses
 
@@ -189,13 +213,13 @@ Add tags to contact
 
 #### Usage Example
 ```php
-$content = $this->contactService->addTagsToContact($contact, $tags);
+$content = $this->contactService->addTagsToContact($contactId, $tags);
 ```
 
 #### Parameters
 | # | name | required | type | description |
 |---|---------|----------|------------------|--------------------------------------------------|
-| 1 | contact | yes | ContactVO object | The contact |
+| 1 | contactId | yes | integer | The contact id|
 | 2 | tags | yes | array | An array with the tags name that should be added |
 
 #### Responses
@@ -212,12 +236,12 @@ Remove specified tags from contact
 
 #### Usage Example
 ```php
-$content = $this->contactService->removeTagsFromContact($contact, $tags);
+$content = $this->contactService->removeTagsFromContact($contactId, $tags);
 ```
 #### Parameters
 | # | name | required | type | description |
 |---|---------|----------|------------------|--------------------------------------------------|
-| 1 | contact | yes | ContactVO object | The contact |
+| 1 | contactId | yes | integer | The contact id|
 | 2 | tags | yes | array | An array with the tags name that should be removed |
 
 #### Responses

@@ -36,6 +36,16 @@ class ContactService
         return $this->maropostGateway->post("contacts", ['contact' => $contact->toArray()]);
     }
 
+    /**
+     * @param $contactId
+     * @param ContactVO $contact
+     * @return array
+     */
+    public function update($contactId, ContactVO $contact)
+    {
+        return $this->maropostGateway->put("contacts/".$contactId, ['contact' => $contact->toArray()]);
+    }
+
     /** Pull list contacts
      *
      * @return stdClass
@@ -47,7 +57,7 @@ class ContactService
 
     /**
      * @param $email
-     * @return stdClass
+     * @return array|mixed|object|stdClass|null
      */
     public function findOneByEmail($email)
     {
@@ -60,12 +70,18 @@ class ContactService
 
     /**
      * @param $id
-     * @return stdClass
+     * @return ContactVO|null
      */
     public function findOneById($id)
     {
         try {
-            return $this->maropostGateway->get("contacts/" . $id);
+            $contact = $this->maropostGateway->get("contacts/" . $id);
+
+            return new ContactVO(
+                $contact->email,
+                $contact->first_name,
+                $contact->last_name
+            );
         } catch (ClientException $e) {
             return null;
         }
@@ -73,7 +89,7 @@ class ContactService
 
     /**
      * @param $email
-     * @return stdClass
+     * @return array|mixed|object|stdClass|null
      * @throws Exception
      */
     public function deleteContactByEmail($email)
@@ -94,15 +110,15 @@ class ContactService
     }
 
     /**
-     * @param ContactVO $contact
+     * @param $contactId
      * @param array $tags
-     * @return stdClass
+     * @return array|mixed|object|stdClass|null
      * @throws GuzzleException
      */
-    public function addTagsToContact(ContactVO $contact, array $tags)
+    public function addTagsToContact($contactId, array $tags)
     {
         try {
-            $this->findOneByEmail($contact->email);
+            $contact = $this->findOneById($contactId);
         } catch (ClientException $e) {
             $responseBodyAsString =
                 $e->getResponse()
@@ -119,15 +135,15 @@ class ContactService
     }
 
     /**
-     * @param ContactVO $contact
+     * @param $contactId
      * @param array $tags
-     * @return stdClass
+     * @return array|mixed|object|stdClass|null
      * @throws GuzzleException
      */
-    public function removeTagsFromContact(ContactVO $contact, array $tags)
+    public function removeTagsFromContact($contactId, array $tags)
     {
         try {
-            $this->findOneByEmail($contact->email);
+            $contact = $this->findOneById($contactId);
         } catch (ClientException $e) {
             $responseBodyAsString =
                 $e->getResponse()
@@ -144,14 +160,14 @@ class ContactService
 
     /**
      * @param array $listIds
-     * @param ContactVO $contact
-     * @return stdClass
+     * @param $contactId
+     * @return array|mixed|object|stdClass|null
      * @throws GuzzleException
      */
-    public function addContactToLists(array $listIds, ContactVO $contact)
+    public function addContactToLists(array $listIds, $contactId)
     {
         try {
-            $this->findOneByEmail($contact->email);
+            $contact = $this->findOneById($contactId);
         } catch (ClientException $e) {
             $responseBodyAsString =
                 $e->getResponse()
@@ -160,23 +176,28 @@ class ContactService
             throw new Exception($responseBodyAsString);
         }
 
-        $contact->subscribeListIds = $listIds;
-
-        $this->maropostGateway->post("contacts", ['contact' => $contact->toArray()]);
+        $this->maropostGateway->post("contacts", ['contact' => array_merge(
+            $contact->toArray(),
+            [
+                'options' => [
+                    'subscribe_list_ids' => implode(',', $listIds)
+                ],
+            ]
+        )]);
 
         return $this->findOneByEmail($contact->email);
     }
 
     /**
      * @param array $listIds
-     * @param ContactVO $contact
-     * @return stdClass
+     * @param $contactId
+     * @return array|mixed|object|stdClass|null
      * @throws GuzzleException
      */
-    public function removeContactFromLists(array $listIds, ContactVO $contact)
+    public function removeContactFromLists(array $listIds, $contactId)
     {
         try {
-            $this->findOneByEmail($contact->email);
+            $contact = $this->findOneById($contactId);
         } catch (ClientException $e) {
             $responseBodyAsString =
                 $e->getResponse()
@@ -185,9 +206,14 @@ class ContactService
             throw new Exception($responseBodyAsString);
         }
 
-        $contact->unsubscribeListIds = $listIds;
-
-        $this->maropostGateway->post("contacts", ['contact' => $contact->toArray()]);
+        $this->maropostGateway->post("contacts", ['contact' => array_merge(
+            $contact->toArray(),
+            [
+                'options' => [
+                    'unsubscribe_list_ids' => implode(',', $listIds),
+                ],
+            ]
+        )]);
 
         return $this->findOneByEmail($contact->email);
     }

@@ -18,6 +18,8 @@ class ContactServiceTest extends TestCase
      */
     public $testEmailAddress;
 
+    public $testId;
+
     protected function setUp()
     {
         parent::setUp();
@@ -25,6 +27,7 @@ class ContactServiceTest extends TestCase
         $this->contactService = app()->make(ContactService::class);
 
         $this->testEmailAddress = 'roxana@drumeo.com';
+        $this->testId = 430;
     }
 
     public function test_create()
@@ -80,7 +83,7 @@ class ContactServiceTest extends TestCase
     public function test_add_tags_to_contact()
     {
         $response = $this->contactService->addTagsToContact(
-            new ContactVO($this->testEmailAddress),
+            $this->testId,
             ['test_tag','Drumeo - Customers - Members']
         );
 
@@ -91,7 +94,7 @@ class ContactServiceTest extends TestCase
     public function test_remove_tags_from_contact()
     {
         $response = $this->contactService->removeTagsFromContact(
-            new ContactVO($this->testEmailAddress),
+            $this->testId,
             ['test_tag','Drumeo - Customers - Members']
         );
 
@@ -101,7 +104,7 @@ class ContactServiceTest extends TestCase
     public function test_add_inexistent_tags_to_contact()
     {
         $response = $this->contactService->addTagsToContact(
-            new ContactVO($this->testEmailAddress),
+            $this->testId,
             [$this->faker->word,$this->faker->word]
         );
 
@@ -111,7 +114,7 @@ class ContactServiceTest extends TestCase
     public function test_add_contact_to_lists()
     {
         $response = $this->contactService->addContactToLists([1],
-            new ContactVO($this->testEmailAddress)
+            $this->testId
         );
 
         $this->assertNotEmpty($response->list_subscriptions);
@@ -127,11 +130,11 @@ class ContactServiceTest extends TestCase
     public function test_remove_contact_from_list()
     {
         $this->contactService->addContactToLists([1],
-            new ContactVO($this->testEmailAddress)
+            $this->testId
         );
 
         $response = $this->contactService->removeContactFromLists([1],
-            new ContactVO($this->testEmailAddress)
+            $this->testId
         );
 
         $this->assertEquals('Unsubscribed', $response->list_subscriptions[0]->status);
