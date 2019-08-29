@@ -1,6 +1,7 @@
 <?php namespace Railroad\Maropost\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Railroad\Maropost\Commands\CreateTags;
 
 class MaropostServiceProvider extends ServiceProvider
 {
@@ -13,7 +14,13 @@ class MaropostServiceProvider extends ServiceProvider
     {
         $this->publishes(
             [
-                __DIR__ . '/../../config/maropost.php' => config_path('maropost.php')
+                __DIR__ . '/../../config/maropost.php' => config_path('maropost.php'),
+            ]
+        );
+
+        $this->commands(
+            [
+                CreateTags::class,
             ]
         );
     }
