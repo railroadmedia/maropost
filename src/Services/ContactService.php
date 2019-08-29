@@ -78,9 +78,9 @@ class ContactService
             $contact = $this->maropostGateway->get("contacts/" . $id);
 
             return new ContactVO(
-                $contact->email,
-                $contact->first_name,
-                $contact->last_name
+                $contact['email'],
+                $contact['first_name'],
+                $contact['last_name']
             );
         } catch (ClientException $e) {
             return null;

@@ -27,14 +27,14 @@ class TagServiceTest extends TestCase
             new TagVO($tagName)
         );
 
-        $this->assertEquals($tagName, $response->name);
+        $this->assertEquals($tagName, $response['name']);
     }
 
     public function test_get_tag_by_name()
     {
-        $response = $this->tagService->findByName('test_tag');
+        $response = $this->tagService->findByName('Drumeo - Customers - Members');
 
-        $this->assertEquals('test_tag', $response->name);
+        $this->assertEquals('Drumeo - Customers - Members', $response['name']);
     }
 
     public function test_get_inexistent_tag_by_name()
@@ -49,7 +49,7 @@ class TagServiceTest extends TestCase
         $tag = $this->tagService->create(
             new TagVO($this->faker->word)
         );
-        $response = $this->tagService->delete($tag->id);
+        $response = $this->tagService->delete($tag['id']);
 
         $this->assertNull($response);
     }

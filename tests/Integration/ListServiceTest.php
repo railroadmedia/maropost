@@ -29,7 +29,7 @@ class ListServiceTest extends TestCase
         //assert count data returned for each list
         foreach ($response as $list)
         {
-            $this->assertTrue(property_exists($list, 'total_contacts_count'));
+            $this->assertTrue(array_key_exists('total_contacts_count', $list));
         }
     }
 
@@ -42,7 +42,7 @@ class ListServiceTest extends TestCase
         //assert count data returned for each list
         foreach ($response as $list)
         {
-            $this->assertFalse(property_exists($list, 'total_contacts_count'));
+            $this->assertFalse(array_key_exists('total_contacts_count', $list));
         }
     }
 
@@ -51,9 +51,9 @@ class ListServiceTest extends TestCase
         $list = new ListVO($this->faker->word, $this->faker->address, $this->faker->languageCode);
         $response = $this->listService->create($list);
 
-        $this->assertEquals($list->name, $response->name);
-        $this->assertEquals($list->address, $response->address);
-        $this->assertEquals($list->language, $response->language);
+        $this->assertEquals($list->name, $response['name']);
+        $this->assertEquals($list->address, $response['address']);
+        $this->assertEquals($list->language, $response['language']);
     }
 
     public function test_update()
@@ -61,9 +61,9 @@ class ListServiceTest extends TestCase
         $newList = new ListVO('test', $this->faker->address, $this->faker->languageCode);
         $response = $this->listService->update(1, $newList);
 
-        $this->assertEquals($newList->name, $response->name);
-        $this->assertEquals($newList->address, $response->address);
-        $this->assertEquals($newList->language, $response->language);
+        $this->assertEquals($newList->name, $response['name']);
+        $this->assertEquals($newList->address, $response['address']);
+        $this->assertEquals($newList->language, $response['language']);
     }
 
     public function test_show()
@@ -71,7 +71,7 @@ class ListServiceTest extends TestCase
         $response = $this->listService->show(1);
 
         $this->assertNotNull($response);
-        $this->assertEquals(1, $response->id);
+        $this->assertEquals(1, $response['id']);
     }
 
     public function test_delete()
@@ -79,7 +79,7 @@ class ListServiceTest extends TestCase
         $listVO = new ListVO($this->faker->word, $this->faker->address, $this->faker->languageCode);
         $list = $this->listService->create($listVO);
 
-        $response = $this->listService->delete($list->id);
+        $response = $this->listService->delete($list['id']);
 
         $this->assertNull($response);
     }

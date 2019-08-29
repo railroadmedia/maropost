@@ -51,7 +51,7 @@ class MaropostGateway
     {
         $response = $this->client->get($target, ['json' => $params]);
 
-        return json_decode($response->getBody());
+        return json_decode($response->getBody(), true);
     }
 
     /**
@@ -60,13 +60,12 @@ class MaropostGateway
      * @param string $target The URI target that will be added to the base url
      * @param array $params The query string and values structured as an array
      * @return array|mixed|object   What Maropost returns
-     * @throws GuzzleException
      */
     public function post($target, $params = [])
     {
         $response = $this->client->post($target, ['json' => $params,]);
 
-        return json_decode($response->getBody());
+        return json_decode($response->getBody(), true);
     }
 
     /**
@@ -80,7 +79,7 @@ class MaropostGateway
     {
         $response = $this->client->put($target, ['json' => $params,]);
 
-        return json_decode($response->getBody());
+        return json_decode($response->getBody(), true);
     }
 
     /**
@@ -94,6 +93,6 @@ class MaropostGateway
     {
         $response = $this->client->delete($target, ['json' => $params]);
 
-        return json_decode($response->getBody());
+        return json_decode($response->getBody(), true);
     }
 }

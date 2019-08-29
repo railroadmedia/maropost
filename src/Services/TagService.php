@@ -92,4 +92,12 @@ class TagService
         }
     }
 
+    /**
+     * @return array|mixed|object|\stdClass
+     */
+    public function index()
+    {
+        return  $this->maropostGateway->get("tags");
+    }
+
 }

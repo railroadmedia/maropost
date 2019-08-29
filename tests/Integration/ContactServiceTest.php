@@ -36,9 +36,9 @@ class ContactServiceTest extends TestCase
             new ContactVO('caleb+test1@drumeo.com', 'caleb', 'f', ['test_field' => 'hello'])
         );
 
-        $this->assertEquals('caleb+test1@drumeo.com', $response->email);
-        $this->assertEquals('caleb', $response->first_name);
-        $this->assertEquals('f', $response->last_name);
+        $this->assertEquals('caleb+test1@drumeo.com', $response['email']);
+        $this->assertEquals('caleb', $response['first_name']);
+        $this->assertEquals('f', $response['last_name']);
     }
 
     public function test_update()
@@ -47,7 +47,7 @@ class ContactServiceTest extends TestCase
             new ContactVO('caleb+test1@drumeo.com', 'caleb', 'favor')
         );
 
-        $this->assertEquals('favor', $response->last_name);
+        $this->assertEquals('favor', $response['last_name']);
     }
 
     public function test_find_one_by_email()
@@ -55,7 +55,7 @@ class ContactServiceTest extends TestCase
         $response = $this->contactService->findOneByEmail($this->testEmailAddress);
 
         $this->assertNotNull($response);
-        $this->assertEquals($this->testEmailAddress, $response->email);
+        $this->assertEquals($this->testEmailAddress, $response['email']);
     }
 
     public function test_find_one_by_id()
@@ -77,28 +77,28 @@ class ContactServiceTest extends TestCase
     {
         $response = $this->contactService->deleteContactByEmail($this->testEmailAddress);
 
-        $this->assertEmpty($response->list_subscriptions);
+        $this->assertEmpty($response['list_subscriptions']);
     }
 
     public function test_add_tags_to_contact()
     {
         $response = $this->contactService->addTagsToContact(
             $this->testId,
-            ['test_tag','Drumeo - Customers - Members']
+            ['Guitareo - Customer - Member - Active','Drumeo - Customers - Members']
         );
 
-        $this->assertNotEmpty($response->tags);
-        $this->assertEquals(2, count($response->tags));
+        $this->assertNotEmpty($response['tags']);
+        $this->assertEquals(2, count($response['tags']));
     }
 
     public function test_remove_tags_from_contact()
     {
         $response = $this->contactService->removeTagsFromContact(
             $this->testId,
-            ['test_tag','Drumeo - Customers - Members']
+            ['Guitareo - Customer - Member - Active','Drumeo - Customers - Members']
         );
 
-        $this->assertEmpty($response->tags);
+        $this->assertEmpty($response['tags']);
     }
 
     public function test_add_inexistent_tags_to_contact()
@@ -108,7 +108,7 @@ class ContactServiceTest extends TestCase
             [$this->faker->word,$this->faker->word]
         );
 
-        $this->assertEmpty($response->tags);
+        $this->assertEmpty($response['tags']);
     }
 
     public function test_add_contact_to_lists()
@@ -117,7 +117,7 @@ class ContactServiceTest extends TestCase
             $this->testId
         );
 
-        $this->assertNotEmpty($response->list_subscriptions);
+        $this->assertNotEmpty($response['list_subscriptions']);
     }
 
     public function test_pull_list_contacts()
@@ -137,7 +137,7 @@ class ContactServiceTest extends TestCase
             $this->testId
         );
 
-        $this->assertEquals('Unsubscribed', $response->list_subscriptions[0]->status);
+        $this->assertEquals('Unsubscribed', $response['list_subscriptions'][0]['status']);
     }
 
 }
