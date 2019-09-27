@@ -33,7 +33,7 @@ class SyncContactRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required',
+            'email' => 'required|email',
             'first_name' => 'string|max:255|nullable',
             'last_name' => 'string|max:255|nullable',
         ];

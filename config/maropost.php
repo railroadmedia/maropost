@@ -8,5 +8,4 @@ return [
     'listId' => 31,
     
     'all_routes_middleware' => [],
-
 ];
