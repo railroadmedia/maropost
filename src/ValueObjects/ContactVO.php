@@ -27,8 +27,8 @@ class ContactVO
      */
     public function __construct(
         $email,
-        $firstName = '',
-        $lastName = '',
+        $firstName = null,
+        $lastName = null,
         array $customFields = [],
         array $tagsToAdd = [],
         array $tagsToRemove = [],
@@ -50,13 +50,26 @@ class ContactVO
      */
     public function toArray()
     {
-        return [
+        $array = [
             'email' => $this->email,
-            'first_name' => $this->firstName,
-            'last_name' => $this->lastName,
             'custom_field' => $this->customFields,
             'add_tags' => $this->tagsToAdd,
             'remove_tags' => $this->tagsToRemove,
         ];
+
+        if ($this->firstName !== null) {
+            $array['first_name'] = $this->firstName;
+        }
+
+        if ($this->lastName !== null) {
+            $array['last_name'] = $this->lastName;
+        }
+
+        $array['options'] = [
+            'subscribe_list_ids' => implode(',', $this->subscribeListIds),
+            'unsubscribe_list_ids' => implode(',', $this->unsubscribeListIds),
+        ];
+
+        return $array;
     }
 }

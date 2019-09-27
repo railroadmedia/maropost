@@ -1,17 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Railroad\Railcontent\Controllers\CommentJsonController;
-use Railroad\Railcontent\Controllers\CommentLikeJsonController;
-use Railroad\Railcontent\Controllers\ContentFieldJsonController;
-use Railroad\Railcontent\Controllers\ContentJsonController;
-use Railroad\Railcontent\Controllers\ContentLikeJsonController;
-use Railroad\Railcontent\Controllers\ContentProgressJsonController;
-use Railroad\Railcontent\Controllers\FullTextSearchJsonController;
-use Railroad\Railcontent\Controllers\PermissionJsonController;
-use Railroad\Railcontent\Controllers\MyListJsonController;
-use Railroad\Railcontent\Controllers\ApiJsonController;
-use Railroad\Railcontent\Services\ConfigService;
 
 Route::group(
     [
@@ -20,9 +9,15 @@ Route::group(
     ],
     function () {
         Route::post(
-            '/sync-contact/{email}',
-            \Railroad\Maropost\Controllers\MaropostController::class . '@contact'
+            '/form/sync-contact',
+            \Railroad\Maropost\Controllers\MaropostFormController::class.'@syncContact'
         )
-            ->name('maropost.sync-contact');
+            ->name('maropost.form.sync-contact');
+        
+        Route::post(
+            '/json/sync-contact',
+            \Railroad\Maropost\Controllers\MaropostJsonController::class.'@syncContact'
+        )
+            ->name('maropost.json.sync-contact');
     }
 );

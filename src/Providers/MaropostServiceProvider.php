@@ -23,6 +23,8 @@ class MaropostServiceProvider extends ServiceProvider
                 CreateTags::class,
             ]
         );
+
+        $this->loadRoutesFrom(__DIR__ . '/../../routes/maropost.php');
     }
 
     /**
